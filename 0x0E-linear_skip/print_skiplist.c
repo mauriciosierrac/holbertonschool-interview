@@ -24,4 +24,5 @@ void print_skiplist(const skiplist_t *list)
 		printf("Index[%lu] = [%d]\n", node->index, node->n);
 	}
 	printf("\n");
+
 }

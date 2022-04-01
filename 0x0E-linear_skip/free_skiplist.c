@@ -16,4 +16,5 @@ void free_skiplist(skiplist_t *list)
 		free(list);
 		free_skiplist(node);
 	}
+
 }
