@@ -1,75 +1,69 @@
+#include <stdio.h>
+#include <stdlib.h>
 #include "sort.h"
+/**
+ * swap - swaps two integers
+ * @x: int
+ * @y: int
+ * Retuen: nothing
+ */
+void swap(int *x, int *y)
+{
+	*x = *x * *y;
+	*y = *x / *y;
+	*x = *x / *y;
+}
 
 /**
- * maxHeapify - makes array into a heap
- * @array: ptr to int array
- * @size: size of array
- * @i: max point
- * @orig_size: original array size to reuse
- * Return: void
+ * getH - turns an array into a max heap
+ * @array: array of integers
+ * @idx: current given index within array
+ * @size: size of the array
+ * @len: size to use as boundaries
+ * Return: nothing
  */
-void maxHeapify(int *array, int size, int i, int orig_size)
+void getH(int *array, int idx, int size, int len)
 {
-	int max = i;
-	int left = 2 * i + 1;
-	int right = 2 * i + 2;
+	int left = (idx * 2) + 1;
+	int right = (idx * 2) + 2;
+	int max = idx;
 
-	if (left < size && array[max] < array[left])
-	{
+	if (left > 0 && left < len && array[left] > array[max])
 		max = left;
-	}
-
-	if (right < size && array[max] < array[right])
-	{
+	if (right > 0 && right < len && array[right] > array[max])
 		max = right;
-	}
-
-	if (max != i)
+	if (max != idx)
 	{
-		swap(&array[i], &array[max]);
-		print_array(array, orig_size);
-		maxHeapify(array, size, max, orig_size);
+		swap(array + max, array + idx);
+		print_array(array, size);
+		getH(array, max, size, len);
 	}
 }
 
 /**
- * heap_sort - heap sort alo
- * @array: ptr to array
- * @size: size of array
- * Return: void
+ * heap_sort - sorts an array of integers in ascending
+ *             order using the Heap sort algorithm
+ * @array: array of integers to sort
+ * @size: size of the array
+ * Return: nothing
  */
 void heap_sort(int *array, size_t size)
 {
-	int i;
+	int i = (size / 2) - 1;
+	int end = size - 1;
 
-	if (!size || !array)
-		return;
-	for (i = size / 2 - 1; i >= 0; i--)
+	while (i >= 0)
 	{
-		maxHeapify(array, size, i, size);
+		getH(array, i, size, size);
+		i--;
 	}
-	for (i = size - 1; i > 0; i--)
+
+	while (end > 0)
 	{
-		if (array[0] >= array[i])
-		{
-			swap(&array[0], &array[i]);
-			print_array(array, size);
-		}
-		maxHeapify(array, i, 0, size);
+		swap(array + end, array);
+		print_array(array, size);
+		getH(array, 0, size, end);
+		end--;
 	}
-}
 
-/**
- * swap - swaps elements of arrays
- * @array1: ptr to 1st element
- * @array2: ptr to 2nd element
- * Return: void
- */
-void swap(int *array1, int *array2)
-{
-	int temp;
-
-	temp = *array1;
-	*array1 = *array2;
-	*array2 = temp;
 }
